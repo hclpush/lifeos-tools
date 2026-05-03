@@ -1,0 +1,50 @@
+{
+  "skill_name": "question-my-knowledge",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "quiz me on what I just read — I finished a chapter about the Default Mode Network in a neuroscience book. It was maybe 20 pages.",
+      "expected_output": "Claude runs a full SQ3R session: asks for a survey/overview, generates 5-7 questions at surface/applied/synthesis levels, evaluates simulated user answers honestly (pushing back on vague ones), and ends with a confidence score + what to revisit.",
+      "files": [],
+      "assertions": [
+        {"name": "has_survey_phase", "description": "Session begins with a survey/overview request before questions are asked"},
+        {"name": "has_5_to_7_questions", "description": "Between 5 and 7 questions are generated"},
+        {"name": "has_depth_levels", "description": "Questions are organized or labeled by depth (surface/applied/synthesis or Level 1/2/3)"},
+        {"name": "pushes_back_on_vague", "description": "When user gives a vague answer, Claude explicitly pushes back and asks for more specificity before providing the answer"},
+        {"name": "has_confidence_score", "description": "A numerical confidence score (X/10) is given in the review phase"},
+        {"name": "has_revisit_list", "description": "Specific items to revisit are listed, not just a general summary"},
+        {"name": "has_consolidation_prompt", "description": "A closing reflection or consolidation prompt is offered"}
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "SQ3R me on habit loops. I just finished chapter 3 of Atomic Habits by James Clear.",
+      "expected_output": "Claude correctly identifies SQ3R trigger, runs the structured session for habit loops: cue-craving-response-reward framework, questions cover both recall and application to user's life, synthesis question connects to behavior design or AI product work.",
+      "files": [],
+      "assertions": [
+        {"name": "has_survey_phase", "description": "Session begins with a survey/overview request before questions are asked"},
+        {"name": "has_5_to_7_questions", "description": "Between 5 and 7 questions are generated"},
+        {"name": "has_depth_levels", "description": "Questions are organized or labeled by depth (surface/applied/synthesis or Level 1/2/3)"},
+        {"name": "pushes_back_on_vague", "description": "When user gives a vague answer, Claude explicitly pushes back and asks for more specificity before providing the answer"},
+        {"name": "has_confidence_score", "description": "A numerical confidence score (X/10) is given in the review phase"},
+        {"name": "has_revisit_list", "description": "Specific items to revisit are listed, not just a general summary"},
+{"name": "synthesis_question_applied", "description": "At least one synthesis question connects the topic to AI, product design, or behavior change (user's domain)", "requires_personalization": true, "note": "Only reliable when 'domains' is configured in SKILL.md frontmatter; without it, Claude infers domains from conversation context and results will vary"}
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "can you test me on what I learned today? I watched a 45-minute video on retrieval practice vs spaced repetition — how they work, the research behind them, and when to use each.",
+      "expected_output": "Claude asks for topic clarification if needed (already given), runs survey phase, generates questions that distinguish retrieval practice from spaced repetition clearly, pushes back when user gives vague answers, ends with actionable revisit list.",
+      "files": [],
+      "assertions": [
+        {"name": "has_survey_phase", "description": "Session begins with a survey/overview request before questions are asked"},
+        {"name": "has_5_to_7_questions", "description": "Between 5 and 7 questions are generated"},
+        {"name": "has_depth_levels", "description": "Questions are organized or labeled by depth (surface/applied/synthesis or Level 1/2/3)"},
+        {"name": "pushes_back_on_vague", "description": "When user gives a vague answer, Claude explicitly pushes back and asks for more specificity before providing the answer"},
+        {"name": "has_confidence_score", "description": "A numerical confidence score (X/10) is given in the review phase"},
+        {"name": "has_revisit_list", "description": "Specific items to revisit are listed, not just a general summary"},
+        {"name": "has_consolidation_prompt", "description": "A closing reflection or consolidation prompt is offered"}
+      ]
+    }
+  ]
+}

@@ -11,6 +11,7 @@ Claude Code skills for personal productivity, social media management, and learn
 | [threads-to-sheet](skills/threads-to-sheet/) | Scrapes Threads posts → Notion database + optional Google Sheets tracker |
 | [question-my-knowledge](skills/question-my-knowledge/) | SQ3R knowledge-verification sessions after learning something |
 | [email-crash-course](skills/email-crash-course/) | Fetches all emails from a sender via Gmail and distills them into a structured Obsidian crash-course note |
+| [compile](skills/compile/) | Processes inbox notes from `200_Journal/` and `300_Notes/` into `500_Wiki/`, skipping unchanged files to save tokens |
 
 ## Installation
 
@@ -23,6 +24,7 @@ cp -r skills/session-recap ~/.claude/skills/
 cp -r skills/threads-to-sheet ~/.claude/skills/
 cp -r skills/question-my-knowledge ~/.claude/skills/
 cp -r skills/email-crash-course ~/.claude/skills/
+cp -r skills/compile ~/.claude/skills/
 ```
 
 Claude Code picks up new skills automatically on next launch. See each skill's README for configuration details.

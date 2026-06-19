@@ -13,6 +13,8 @@ Claude Code skills for personal productivity, social media management, and learn
 | [email-crash-course](skills/email-crash-course/) | Fetches all emails from a sender via Gmail and distills them into a structured Obsidian crash-course note |
 | [compile](skills/compile/) | Processes inbox notes from `200_Journal/` and `300_Notes/` into `500_Wiki/`, skipping unchanged files to save tokens |
 | [eod](skills/eod/) | End-of-day wind-down: summarizes work done, open items for tomorrow, and closes with a wellness reminder |
+| [learn](skills/learn/) | Capture step of the Daily Learning Loop: opens/creates today's daily learning log from a template |
+| [quiz-me](skills/quiz-me/) | Evening test of the Daily Learning Loop: SQ3R / Feynman / simulation per concept + spaced-repetition queue (reuses question-my-knowledge) |
 
 ## Installation
 
@@ -27,6 +29,8 @@ cp -r skills/question-my-knowledge ~/.claude/skills/
 cp -r skills/email-crash-course ~/.claude/skills/
 cp -r skills/compile ~/.claude/skills/
 cp -r skills/eod ~/.claude/skills/
+cp -r skills/learn ~/.claude/skills/
+cp -r skills/quiz-me ~/.claude/skills/
 ```
 
 Claude Code picks up new skills automatically on next launch. See each skill's README for configuration details.

@@ -46,6 +46,18 @@ cd automations/append-to-obsidian
 ./install.sh
 ```
 
+## Repo hooks
+
+A tracked `pre-commit` hook (in `.githooks/`) refuses any commit where a folder
+under `skills/` or `automations/` isn't linked in this README — so the front page
+never drifts out of sync. Enable it once per clone:
+
+```bash
+./scripts/install-hooks.sh
+```
+
+Emergency bypass: `git commit --no-verify`.
+
 ## License
 
 MIT — see [LICENSE](LICENSE).

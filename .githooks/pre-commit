@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+# pre-commit: refuse the commit if any skill or automation folder is not
+# referenced in the root README.md. Keeps the repo's front page in sync with
+# what actually ships. Works for anyone who commits (Claude or human), not just
+# in a Claude Code session.
+#
+# Enable once per clone:  git config core.hooksPath .githooks
+# Emergency bypass:       git commit --no-verify
+set -euo pipefail
+
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+README="$REPO_ROOT/README.md"
+missing=()
+
+for category in skills automations; do
+  dir="$REPO_ROOT/$category"
+  [ -d "$dir" ] || continue
+  for path in "$dir"/*/; do
+    [ -d "$path" ] || continue
+    name="${path%/}"; name="${name##*/}"
+    # A folder counts as "documented" if README links into it, e.g. ](skills/<name>
+    if ! grep -q "](${category}/${name}" "$README"; then
+      missing+=("${category}/${name}")
+    fi
+  done
+done
+
+if [ "${#missing[@]}" -gt 0 ]; then
+  echo "✖ pre-commit: README.md is missing entries for:" >&2
+  for m in "${missing[@]}"; do echo "    - ${m}" >&2; done
+  echo >&2
+  echo "  Add each to README.md (link the name into its folder), then commit again." >&2
+  echo "  Emergency bypass: git commit --no-verify" >&2
+  exit 1
+fi

@@ -1,0 +1,8 @@
+{
+  "name": "scripted-scrape",
+  "private": true,
+  "description": "Deterministic Playwright scrapers for the scripted-scrape skill — scripts browse, the model never does.",
+  "dependencies": {
+    "playwright": "^1.49.0"
+  }
+}

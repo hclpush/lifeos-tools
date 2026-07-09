@@ -41,6 +41,21 @@ cp -r skills/security-audit ~/.claude/skills/
 
 Claude Code picks up new skills automatically on next launch. See each skill's README for configuration details.
 
+## Automations
+
+Standalone OS-level automations (not Claude Code skills).
+
+| Automation | What it does |
+|---|---|
+| [append-to-obsidian](automations/append-to-obsidian/) | macOS Quick Action: right-click selected text in any app → append it to an Obsidian note via `notesmd-cli` |
+
+Install from its folder:
+
+```bash
+cd automations/append-to-obsidian
+./install.sh
+```
+
 ## License
 
 MIT — see [LICENSE](LICENSE).

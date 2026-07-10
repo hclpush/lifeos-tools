@@ -26,7 +26,10 @@
 // granted interactively 2026-07-09.
 
 function run() {
-    const TRIGGER_FOLDER = 'obsidian';   // smart folder that marks a note for sync
+    // Smart folder that marks a note for sync. Trigger tag is #for-obsidian
+    // (renamed 2026-07-10 so real tags stay meaningful); "obsidian" kept as a
+    // fallback name while the Notes-side folder/tag transition completes.
+    const TRIGGER_FOLDERS = ['for-obsidian', 'obsidian'];
 
     const Notes = Application('Notes');
     const out = [];
@@ -42,7 +45,7 @@ function run() {
     // "Notes" container and the trash are skipped — they're never routing folders
     // and enumerating them costs the most.
     const folderIds = {};        // folderName -> Set-like map of note id -> true
-    let triggerNotesRef = null;  // the trigger folder's notes collection
+    const triggerRefs = {};      // trigger-candidate folderName -> notes collection
     let triggerAccount = '';
 
     const accounts = Notes.accounts();
@@ -59,8 +62,8 @@ function run() {
             try { nm = folders[f].name(); } catch (e) { continue; }
             if (nm === 'Recently Deleted') continue;
 
-            if (nm === TRIGGER_FOLDER) {
-                triggerNotesRef = folders[f].notes;
+            if (TRIGGER_FOLDERS.indexOf(nm) >= 0) {
+                triggerRefs[nm] = folders[f].notes;
                 triggerAccount = accountName;
                 continue;
             }
@@ -74,10 +77,20 @@ function run() {
         }
     }
 
+    // First trigger-candidate name that actually exists wins (preference order).
+    let triggerNotesRef = null, triggerName = '';
+    for (let t = 0; t < TRIGGER_FOLDERS.length; t++) {
+        if (triggerRefs[TRIGGER_FOLDERS[t]]) {
+            triggerName = TRIGGER_FOLDERS[t];
+            triggerNotesRef = triggerRefs[triggerName];
+            break;
+        }
+    }
+
     if (triggerNotesRef === null) {
         return JSON.stringify({
             generatedAt: new Date().toISOString(),
-            error: 'trigger smart folder "' + TRIGGER_FOLDER + '" not found in any account',
+            error: 'trigger smart folder not found in any account (looked for: ' + TRIGGER_FOLDERS.join(', ') + ')',
             noteCount: 0, skippedLockedCount: 0, skippedLocked: [], notes: []
         }, null, 2);
     }
@@ -134,7 +147,7 @@ function run() {
 
     return JSON.stringify({
         generatedAt: new Date().toISOString(),
-        triggerFolder: TRIGGER_FOLDER,
+        triggerFolder: triggerName,
         foldersSeen: Object.keys(folderIds),
         noteCount: out.length,
         skippedLockedCount: skippedLocked.length,

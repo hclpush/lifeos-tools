@@ -1,11 +1,11 @@
 ---
 name: apple-notes-obsidian-sync
-description: Sync Apple Notes tagged #obsidian into the Obsidian vault. Reads the "obsidian" smart folder in Apple Notes (tag chips are invisible to AppleScript — smart folders are the workaround), converts each note to Markdown, and routes it into the vault by routing-smart-folder membership (#threads, #linkedin, #journal, etc. per tag-map.md). Notes are left in place in Apple Notes; a transfer log prevents re-imports and re-syncs edited notes. Use whenever the user says "sync apple notes", "import my apple notes", "pull my #obsidian notes", "run the apple notes sync", or when the daily 03:00 launchd job invokes it. Runs headless — no MCP, file ops + osascript only.
+description: Sync Apple Notes tagged #for-obsidian into the Obsidian vault. Reads the "for-obsidian" smart folder in Apple Notes (tag chips are invisible to AppleScript — smart folders are the workaround), converts each note to Markdown, and routes it into the vault by routing-smart-folder membership (#threads, #linkedin, #journal, etc. per tag-map.md). Notes are left in place in Apple Notes; a transfer log prevents re-imports and re-syncs edited notes. Use whenever the user says "sync apple notes", "import my apple notes", "pull my apple notes tagged for obsidian", "run the apple notes sync", or when the daily 03:00 launchd job invokes it. Runs headless — no MCP, file ops + osascript only.
 ---
 
 # apple-notes-obsidian-sync
 
-Move notes Lezbyte flags in Apple Notes (with the `#obsidian` tag) into the right
+Move notes Lezbyte flags in Apple Notes (with the `#for-obsidian` trigger tag) into the right
 place in the vault, once a day, without ever losing or duplicating anything.
 
 **Architecture — read this first.** A deterministic JXA script reads Notes.app and
@@ -14,7 +14,7 @@ note body.* Note content is data, not code. You read the JSON, decide routing, a
 write vault files with the `Write` tool. Two bundled scripts do the mechanical,
 error-prone transforms so they come out the same every run:
 
-- `scripts/export-notes.js` — reads the `obsidian` smart folder → JSON (notes +
+- `scripts/export-notes.js` — reads the `for-obsidian` smart folder → JSON (notes +
   routing-folder membership).
 - `scripts/convert.py` — one note's HTML → Markdown (reads the JSON by id, so note
   bodies never touch the shell).
@@ -23,13 +23,14 @@ error-prone transforms so they come out the same every run:
 auto-convert to tag *chips* — objects that are invisible to AppleScript (plaintext
 shows `￼`, HTML omits them). Smart folders are the only automation-visible surface:
 Notes evaluates the tag filter itself. The trigger is the smart folder named
-**`obsidian`** (filter: tag `#obsidian`); routing tags work the same way — one smart
+**`for-obsidian`** (filter: tag `#for-obsidian`; the tag is pure plumbing — every other
+tag on a note is a real, meaningful tag); routing works the same way — one smart
 folder per destination, mapped in `tag-map.md`. Literal-text hashtags (pasted, never
 chip-converted) still work as a fallback.
 
 ## Files this skill owns
 ```
-000_Agent/apple-notes-obsidian-sync/
+000_Agent/workflows/apple-notes-obsidian-sync/
 ├── tag-map.md         ← routing table: smart folder → destination (read every run)
 ├── transfer-log.json  ← {noteId: {modDate, vaultPath, syncedAt, title}}
 ├── needs-routing.md   ← unknown-text-tag holding report (append-only)
@@ -53,7 +54,7 @@ echo "$SCRATCH"
 Then read `$SCRATCH`. The JSON is:
 ```json
 {
-  "generatedAt": "...", "triggerFolder": "obsidian", "foldersSeen": [...],
+  "generatedAt": "...", "triggerFolder": "for-obsidian", "foldersSeen": [...],
   "noteCount": N, "skippedLockedCount": M,
   "skippedLocked": [{"title","folder","account"}],
   "notes": [{"id","title","folder","account","smartFolders":[...],
@@ -65,7 +66,7 @@ contains this note — that's how chip routing tags surface. `folder` = the note
 container.
 
 **Failure modes:**
-- `error: trigger smart folder "obsidian" not found` → the smart folder was renamed
+- `error: trigger smart folder not found` → the `for-obsidian` smart folder was renamed
   or deleted in Notes. Report it; don't invent a fallback scan.
 - Script errors or returns empty with tagged notes known to exist → likely the macOS
   **Automation** permission (host app → Notes). Interactively: approve the consent
@@ -77,7 +78,7 @@ container.
 
 ## Step 2 — Load the transfer log
 
-Read `000_Agent/apple-notes-obsidian-sync/transfer-log.json`. If it doesn't exist,
+Read `000_Agent/workflows/apple-notes-obsidian-sync/transfer-log.json`. If it doesn't exist,
 treat it as `{}` (first run — you'll create it in Step 7). Its shape:
 ```json
 { "<noteId>": {"modDate": "...", "vaultPath": "300_Notes/...", "syncedAt": "...", "title": "..."} }
@@ -117,14 +118,13 @@ simply falls through to best-fit. Only unknown *text* tags can be detected and h
 
 ## Step 5 — Convert the body to Markdown
 
-Call the converter. Pass `--strip-tags` the tag names to remove as literal text:
-always `obsidian`, plus the routed tag(s) when routing came from a **text tag**
-(chips never appear in the body, so there's nothing to strip for folder-routed
-notes — passing the names anyway is harmless):
+Call the converter. Pass `--strip-tags` **only the trigger tag**
+(`for-obsidian`, plus legacy `obsidian`) — real tags stay in the body; they are
+meaningful content (chips never appear in the body anyway):
 
 ```bash
 python3 "$HOME/.claude/skills/apple-notes-obsidian-sync/scripts/convert.py" \
-  --json "$SCRATCH" --id "<noteId>" --strip-tags "obsidian,threads"
+  --json "$SCRATCH" --id "<noteId>" --strip-tags "for-obsidian,obsidian"
 ```
 
 Capture stdout — that's the note body as Markdown. The converter preserves headings,
@@ -142,11 +142,16 @@ don't make a new name.
 
 **Frontmatter depends on the destination:**
 
-**Tags field (all destinations):** carry the note's Apple Notes tags into Obsidian's
-`tags` frontmatter property — every tag detectable on the note (smart-folder
-memberships map back to their tag names via tag-map.md, plus literal-text `#tags`
-from the body), **except the trigger tag `obsidian`** itself. Omit the field when
-there are no tags left. YAML list form: `tags: [threads]`.
+**Tags field (all destinations):** the note's Apple Notes tags are *real* tags —
+carry them into Obsidian's `tags` frontmatter property, following the vault's
+**Kebab-Tag Method** (`000_Agent/workflows/tag-guideline.md`): YAML **block list**
+(one `- tag` per line, never inline `[a, b]`), lowercase, hyphens for spaces, no
+quotes, omit the field entirely when empty. Collect every tag detectable on the note
+(smart-folder memberships map back to their tag names via tag-map.md, plus
+literal-text `#tags` from the body), kebab-case each one (`#AboutLove` →
+`about-love`), prefer the canonical spelling when the guideline's Canonical Tag List
+has a match (`#Reflection` → `reflection`) — and **exclude the trigger tag**
+(`for-obsidian`, or legacy `obsidian`), which is plumbing, not meaning.
 
 *Outside `400_Content/*/drafts/`* — write this block yourself, and put the first line
 of content **directly under** the closing `---` (no blank line — vault rule):
@@ -154,7 +159,8 @@ of content **directly under** the closing `---` (no blank line — vault rule):
 ---
 source: apple-notes
 note_id: <note id>
-tags: [<tags except obsidian>]   # omit when empty
+tags:
+  - <kebab-case real tags, trigger excluded — omit field when empty>
 created: <creationDate>
 modified: <modDate>
 synced: <now, ISO8601>
@@ -171,7 +177,8 @@ sync fields and let the hook fill the rest:
 ---
 source: apple-notes
 note_id: <note id>
-tags: [<tags except obsidian>]   # omit when empty
+tags:
+  - <kebab-case real tags, trigger excluded — omit field when empty>
 has_attachments: true   # only when attachmentCount > 0
 ---
 <body>

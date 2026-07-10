@@ -1,0 +1,18 @@
+{
+  "_comment": "Copy this file to config.json and fill in your values. config.json is gitignored — never commit it.",
+  "vault_root": "/path/to/your/obsidian/vault",
+  "creator_list_path": "400_Content/threads/Threads Curated Creator List for Life Search Genre.md",
+  "knowledge_path": "500_Wiki/social-media/threads-knowledge.md",
+  "output_dir": "400_Content/threads/reference",
+  "lookback_days": 14,
+  "share_floor": 5,
+  "weights": {
+    "quotes": 4,
+    "replies": 3,
+    "reposts": 2,
+    "likes": 1
+  },
+  "notion_database_id": null,
+  "notion_parent_page_id": null,
+  "rate_limit_seconds": 1.5
+}

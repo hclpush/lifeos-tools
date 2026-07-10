@@ -7,7 +7,7 @@ Run Lezbyte's Morning Daily Briefing. Follow these steps in order:
 
 1. **Check today's date** using system time before doing anything else.
 
-2. **Pull today's Google Calendar events** using the claude.ai Google Calendar MCP (`list_events` for today). For each event note: title, time, location/link (classify as online or physical).
+2. **Pull today's Google Calendar events** — query all calendar IDs from `000_Agent/mcp/calendar-ids.md` in parallel using `list_events` for today. Never query primary only. For each event note: title, time, location/link (classify as online or physical).
 
 3. **Pull yesterday's Gmail** using the claude.ai Gmail MCP (`search_threads` with query `after:<yesterday's date> before:<today's date>`). Scan subject lines and senders to categorize at a high level (e.g. AI news, newsletters, personal, work, receipts, etc.). Flag anything unusual or that needs a reply.
 

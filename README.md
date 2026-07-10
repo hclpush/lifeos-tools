@@ -44,6 +44,7 @@ Standalone OS-level automations (not Claude Code skills).
 | Automation | What it does |
 |---|---|
 | [append-to-obsidian](automations/append-to-obsidian/) | macOS Quick Action: right-click selected text in any app → append it to an Obsidian note via `notesmd-cli` |
+| [agent-routing-guard](automations/agent-routing-guard/) | Claude Code PreToolUse hook: blocks the agent from misplacing files in the vault's `000_Agent/` workspace (root closed, new folders need permission, memory mirror read-only) |
 
 Install from its folder:
 

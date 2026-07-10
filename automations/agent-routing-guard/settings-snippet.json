@@ -1,0 +1,17 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit|mcp__filesystem__write_file|mcp__filesystem__edit_file|mcp__filesystem__create_directory|mcp__filesystem__move_file",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/scripts/check-000agent-routing.sh",
+            "timeout": 10,
+            "statusMessage": "Checking 000_Agent routing"
+          }
+        ]
+      }
+    ]
+  }
+}

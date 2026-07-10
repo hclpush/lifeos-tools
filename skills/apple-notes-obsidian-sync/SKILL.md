@@ -105,6 +105,10 @@ adding a row). For each note in the working set, in priority order:
    matches a row in the tag-map table, that row's destination wins. Several matches →
    first row in table order; note the collision in the run report. (`smartFolders`
    excludes the note's real container, so every entry is a tag signal.)
+   The `obsidian` row is special: it means **you decide** the best-fit `300_Notes/`
+   subfolder from the note's content. If genuinely uncertain: interactively, ask
+   Lezbyte (AskUserQuestion); in the headless run, hold it in `needs-routing.md`
+   instead of guessing.
 2. **Unknown membership** — the note is in smart folders but *none* match the table →
    **do not write to the vault**; append to `needs-routing.md` (Step 8) and move on.
    The tag is real and deliberate — where it routes is Lezbyte's call, not a guess.

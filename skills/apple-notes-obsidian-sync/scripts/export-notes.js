@@ -26,10 +26,10 @@
 // granted interactively 2026-07-09.
 
 function run() {
-    // Smart folder that marks a note for sync. Trigger tag is #for-obsidian
-    // (renamed 2026-07-10 so real tags stay meaningful); "obsidian" kept as a
-    // fallback name while the Notes-side folder/tag transition completes.
-    const TRIGGER_FOLDERS = ['for-obsidian', 'obsidian'];
+    // Smart folder that marks a note for sync. Trigger tag is #for-obsidian —
+    // pure plumbing; every other tag on a note (including #obsidian) is a real
+    // routing tag with its own smart folder.
+    const TRIGGER_FOLDERS = ['for-obsidian'];
 
     const Notes = Application('Notes');
     const out = [];
@@ -125,10 +125,13 @@ function run() {
         let attachmentCount = 0;
         try { attachmentCount = note.attachments().length; } catch (e) {}
 
-        // Which routing-candidate folders also contain this note (chip-tag routing).
+        // Which routing-candidate folders also contain this note (chip-tag
+        // routing). A note has exactly one real container, so any OTHER folder
+        // listing it must be a smart folder — exclude the container to keep the
+        // list purely tag-driven.
         const smartFolders = [];
         for (const fn in folderIds) {
-            if (folderIds[fn][id]) smartFolders.push(fn);
+            if (fn !== container && folderIds[fn][id]) smartFolders.push(fn);
         }
 
         out.push({

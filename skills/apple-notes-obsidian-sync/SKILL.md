@@ -103,28 +103,34 @@ adding a row). For each note in the working set, in priority order:
 
 1. **Routing-folder membership** — if a name in the note's `smartFolders` list
    matches a row in the tag-map table, that row's destination wins. Several matches →
-   first row in table order; note the collision in the run report.
-2. **Literal-text hashtag fallback** — scan `bodyText` for plain-text `#tags`
-   (case-insensitive) matching the tag names in the table. A match routes the same as
-   folder membership. A text tag that is NOT in the table → **do not write to the
-   vault**; append to `needs-routing.md` (Step 8) and move on — that's Lezbyte's call.
-3. **Neither** → best-fit existing `300_Notes/` subfolder by reading the note's
-   content: `ai-agent, automation, claude, clippings, command-line-interface,
-   content-strategy, data-science, learning, others, statistical-learning-script,
-   threads, written-by-me`. Genuinely ambiguous → `300_Notes/others/`.
+   first row in table order; note the collision in the run report. (`smartFolders`
+   excludes the note's real container, so every entry is a tag signal.)
+2. **Unknown membership** — the note is in smart folders but *none* match the table →
+   **do not write to the vault**; append to `needs-routing.md` (Step 8) and move on.
+   The tag is real and deliberate — where it routes is Lezbyte's call, not a guess.
+   (Extra unknown memberships alongside a known one don't block routing — mention
+   them in the run report.)
+3. **Literal-text hashtag fallback** — no memberships at all: scan `bodyText` for
+   plain-text `#tags` (case-insensitive) matching the tag-map. A match routes; a text
+   tag NOT in the table → `needs-routing.md`, same as rule 2.
+4. **No tag signal of any kind** → best-fit existing `300_Notes/` subfolder by
+   reading the note's content: `ai-agent, automation, claude, clippings,
+   command-line-interface, content-strategy, data-science, learning, others,
+   statistical-learning-script, threads, written-by-me`. Genuinely ambiguous →
+   `300_Notes/others/`.
 
-(Unknown *chip* tags are invisible to automation — a note carrying only unknown chips
-simply falls through to best-fit. Only unknown *text* tags can be detected and held.)
+(A chip tag is only detectable if a smart folder exists for it — chips without one
+are invisible and leave no signal at all.)
 
 ## Step 5 — Convert the body to Markdown
 
 Call the converter. Pass `--strip-tags` **only the trigger tag**
-(`for-obsidian`, plus legacy `obsidian`) — real tags stay in the body; they are
-meaningful content (chips never appear in the body anyway):
+(`for-obsidian`) — real tags stay in the body; they are meaningful content
+(chips never appear in the body anyway):
 
 ```bash
 python3 "$HOME/.claude/skills/apple-notes-obsidian-sync/scripts/convert.py" \
-  --json "$SCRATCH" --id "<noteId>" --strip-tags "for-obsidian,obsidian"
+  --json "$SCRATCH" --id "<noteId>" --strip-tags "for-obsidian"
 ```
 
 Capture stdout — that's the note body as Markdown. The converter preserves headings,
@@ -151,7 +157,8 @@ quotes, omit the field entirely when empty. Collect every tag detectable on the 
 literal-text `#tags` from the body), kebab-case each one (`#AboutLove` →
 `about-love`), prefer the canonical spelling when the guideline's Canonical Tag List
 has a match (`#Reflection` → `reflection`) — and **exclude the trigger tag**
-(`for-obsidian`, or legacy `obsidian`), which is plumbing, not meaning.
+(`for-obsidian`), which is plumbing, not meaning. `obsidian` itself is a normal
+real tag, not the trigger.
 
 *Outside `400_Content/*/drafts/`* — write this block yourself, and put the first line
 of content **directly under** the closing `---` (no blank line — vault rule):

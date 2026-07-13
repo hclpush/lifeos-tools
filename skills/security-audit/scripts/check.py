@@ -31,8 +31,10 @@ import time
 from datetime import datetime, timezone
 
 HOME = os.path.expanduser("~")
-DEFAULT_VAULT = os.path.join(
-    HOME, "Library", "Mobile Documents", "iCloud~md~obsidian", "Documents", "vault"
+# Vault resolution: --vault flag > LIFEOS_VAULT env var > iCloud-Obsidian default below
+DEFAULT_VAULT = os.environ.get(
+    "LIFEOS_VAULT",
+    os.path.join(HOME, "Library", "Mobile Documents", "iCloud~md~obsidian", "Documents", "vault"),
 )
 
 # Tools that execute arbitrary code in a logged-in browser — must never be auto-allowed.
@@ -160,7 +162,9 @@ def hooks_hash(settings):
 
 
 def snapshot(parsed, vault):
-    la = sorted(os.path.basename(p) for p in glob.glob(os.path.join(HOME, "Library", "LaunchAgents", "com.lezbyte.*.plist")))
+    # Prefix of your personal launchd jobs (baseline-drift check). Override via env.
+    la_prefix = os.environ.get("LIFEOS_LAUNCHD_PREFIX", "com.lifeos.")
+    la = sorted(os.path.basename(p) for p in glob.glob(os.path.join(HOME, "Library", "LaunchAgents", la_prefix + "*.plist")))
     mcp = sorted(((parsed.get("claude-json") or {}).get("mcpServers") or {}).keys())
     files = {}
     for name in ("global", "vault-local"):

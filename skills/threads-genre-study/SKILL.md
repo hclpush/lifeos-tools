@@ -1,12 +1,12 @@
 ---
 name: threads-genre-study
 description: >
-  Scrape Threads for the top-performing posts in Lezbyte's genre (rebuilding life,
-  inner work, psychology, self-healing), rank them by weighted engagement, and
-  produce a per-post style/technique breakdown grounded in her own threads-knowledge
-  notes. Use when the user wants to: study what's working in her genre, build a
-  Threads swipe file, analyze hooks/structure/voice of high-share posts, see top
-  reposted/quoted posts from her curated creator list, or run a genre study.
+  Scrape Threads for the top-performing posts in the user's configured genre (e.g.
+  rebuilding life, inner work, psychology, self-healing), rank them by weighted
+  engagement, and produce a per-post style/technique breakdown grounded in their own
+  threads-knowledge notes. Use when the user wants to: study what's working in their
+  genre, build a Threads swipe file, analyze hooks/structure/voice of high-share posts,
+  see top reposted/quoted posts from their curated creator list, or run a genre study.
   Trigger phrases: "study genre", "threads genre study", "analyze top threads posts",
   "what's working on threads", "swipe file for threads", "/threads-genre-study".
 compatibility:
@@ -18,7 +18,7 @@ compatibility:
 # Threads Genre Study
 
 Discovery + ranking + per-post style breakdown of high-share Threads posts in
-Lezbyte's genre. Output: a markdown swipe file in the vault **and** rows in a
+the configured genre. Output: a markdown swipe file in the vault **and** rows in a
 Notion database for cumulative tracking.
 
 **Companion to** `threads-to-sheet` (archival). This skill is for *learning*,
@@ -37,13 +37,13 @@ cat ~/.claude/skills/threads-genre-study/config.json
 
 All paths are relative to `vault_root` unless absolute. Resolve once and use full paths thereafter.
 
-### B. Load Lezbyte's framework
+### B. Load the user's framework
 
 Read `<vault_root>/<knowledge_path>` (default: `500_Wiki/social-media/threads-knowledge.md`).
 
 - If it's a file: read it.
 - If it's a directory: read every `.md` inside.
-- If missing: warn the user and continue with a degraded analysis ("`threads-knowledge` not found at `<path>` — proceeding without Lezbyte's framework; analysis will use generic copywriting taxonomy").
+- If missing: warn the user and continue with a degraded analysis ("`threads-knowledge` not found at `<path>` — proceeding without your framework; analysis will use generic copywriting taxonomy").
 
 Keep this content in your working memory through Phase 4. The per-post breakdown MUST use the vocabulary, hook types, and structural categories from this source — not generic copywriting taxonomy.
 
@@ -150,13 +150,13 @@ If fewer than 5 pass: take all that qualify and add a note to the output: *"Only
 
 ## Phase 4 — Per-post style breakdown
 
-Before writing breakdowns, **re-read the threads-knowledge content from Phase 0**. Then for each of the top 5 posts produce these fields, using Lezbyte's vocabulary from the knowledge file:
+Before writing breakdowns, **re-read the threads-knowledge content from Phase 0**. Then for each of the top 5 posts produce these fields, using the vocabulary from the knowledge file:
 
-- **Hook** — first line/sentence; hook type per Lezbyte's framework (if the framework uses specific terms like "漢堡理論" / "黃金 15 分鐘" / "借雞生蛋", apply them).
+- **Hook** — first line/sentence; hook type per the user's framework (if the framework uses its own specific terms, apply them).
 - **Structure** — paragraph rhythm, line breaks, list vs. prose, length category.
 - **Voice move** — emotional/rhetorical technique (naming a hidden feeling, reframing, permission-giving, contrarian, confession, etc.).
 - **Why it travels** — best hypothesis grounded in the threads-knowledge notes (algorithm logic, audience dynamics, comment-bait mechanics). NOT just "it's relatable."
-- **Steal** — one sentence Lezbyte can replicate: a transferable structural template.
+- **Steal** — one sentence the user can replicate: a transferable structural template.
 
 After per-post breakdowns, write a **Cross-post patterns** synthesis: 3–5 sentences on what's common across the 5 (recurring hook types, length, emotional moves, share triggers).
 

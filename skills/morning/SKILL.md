@@ -3,7 +3,7 @@ name: morning
 description: Morning Daily Briefing — motivational quote, today's calendar summary, yesterday's email highlights, upbeat wrap-up.
 ---
 
-Run Lezbyte's Morning Daily Briefing. Follow these steps in order:
+Run the user's Morning Daily Briefing. Follow these steps in order:
 
 1. **Check today's date** using system time before doing anything else.
 
@@ -15,11 +15,11 @@ Run Lezbyte's Morning Daily Briefing. Follow these steps in order:
 
 ---
 
-☀️ **Good morning, Lezbyte.**
+☀️ **Good morning, [user's name].**
 
 > "[Quote]" — Name, descriptor
 
-*[One quote from a female philosopher, feminist, scientist, or modern inspiring figure — vary it each day. Match the tone to her context: grounding if stressed, energizing if in flow, reflective if introspective.]*
+*[One quote from a female philosopher, feminist, scientist, or modern inspiring figure — vary it each day. Match the tone to the user's context: grounding if stressed, energizing if in flow, reflective if introspective.]*
 
 ---
 

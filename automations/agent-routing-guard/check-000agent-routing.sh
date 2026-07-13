@@ -3,7 +3,8 @@
 # Reads the tool-call JSON on stdin; emits a permissionDecision only on violations.
 # Scope: Write/Edit + filesystem-MCP writes. Bash file ops (cp/rsync in sync jobs) are not intercepted.
 
-VAULT="/Users/user/Library/Mobile Documents/iCloud~md~obsidian/Documents/vault"
+# Set LIFEOS_VAULT in the environment (hooks inherit your shell env via settings.json), or edit the fallback path below.
+VAULT="${LIFEOS_VAULT:-/path/to/your/obsidian/vault}"
 AGENT_DIR="$VAULT/000_Agent"
 
 input=$(cat)

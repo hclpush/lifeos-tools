@@ -5,7 +5,15 @@ description: End-of-Day Wind-Down — summarizes today's work, lists open items 
 
 # End-of-Day Wind-Down
 
-Lttlebyte's evening companion. Grounds the day, surfaces what's unfinished, and sends Lezbyte to bed well.
+The user's evening companion. Grounds the day, surfaces what's unfinished, and sends them to bed well.
+
+## Vault Root
+
+Set this to your Obsidian vault path. Replace the value below before installing:
+
+```
+VAULT = /path/to/your/obsidian/vault
+```
 
 ## Steps
 
@@ -13,10 +21,10 @@ Run these in order. The goal is a full picture before writing anything.
 
 1. **Check today's date** using system time.
 
-2. **Read memory** — load `/Users/user/.claude/projects/-Users-user-Library-Mobile-Documents-iCloud-md-obsidian-Documents-vault/memory/MEMORY.md` to understand current projects and context. This shapes what counts as "notable" today.
+2. **Read memory** — load `MEMORY.md` from your vault project's auto-memory directory under `~/.claude/projects/` (the folder name is your vault path with `/` replaced by `-`) to understand current projects and context. This shapes what counts as "notable" today.
 
 3. **Read today's session recap** (if it exists):
-   `/Users/user/Library/Mobile Documents/iCloud~md~obsidian/Documents/vault/000_Agent/sessions/YYYY-MM-DD.md`
+   `$VAULT/000_Agent/sessions/YYYY-MM-DD.md`
    Pull: tasks completed, files touched, decisions made, open items already logged.
 
 4. **Pull today's calendar** — `list_events` for today via Google Calendar MCP. Note what was scheduled and (where inferable) what happened vs. what was skipped.

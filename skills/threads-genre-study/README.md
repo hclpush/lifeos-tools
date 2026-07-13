@@ -1,6 +1,6 @@
 # threads-genre-study
 
-Discovery + ranking + per-post style breakdown of high-share Threads posts in Lezbyte's genre.
+Discovery + ranking + per-post style breakdown of high-share Threads posts in your configured genre.
 
 **Outputs:**
 - Markdown swipe file → `400_Content/threads/reference/threads-genre-study-YYYY-MM-DD.md`

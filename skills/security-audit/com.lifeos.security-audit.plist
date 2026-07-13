@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>com.lifeos.security-audit</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>/Users/YOURUSER/.claude/bin/security-audit-runner.sh</string>
+	</array>
+	<key>EnvironmentVariables</key>
+	<dict>
+		<key>HOME</key>
+		<string>/Users/YOURUSER</string>
+	</dict>
+	<key>StartCalendarInterval</key>
+	<dict>
+		<key>Weekday</key>
+		<integer>1</integer>
+		<key>Hour</key>
+		<integer>9</integer>
+		<key>Minute</key>
+		<integer>0</integer>
+	</dict>
+	<key>RunAtLoad</key>
+	<false/>
+	<key>StandardOutPath</key>
+	<string>/Users/YOURUSER/.claude/logs/security-audit.log</string>
+	<key>StandardErrorPath</key>
+	<string>/Users/YOURUSER/.claude/logs/security-audit-error.log</string>
+	<key>WorkingDirectory</key>
+	<string>/Users/YOURUSER</string>
+</dict>
+</plist>

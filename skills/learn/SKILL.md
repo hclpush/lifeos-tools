@@ -14,12 +14,12 @@ Set this to your Obsidian vault path. Replace the value below before installing:
 VAULT = /path/to/your/obsidian/vault
 ```
 
-> Assumes the LifeOS folder structure: a `300_Notes/learning/` capture folder and a `700_Templates/learning-daily.md` template (a copy is bundled in this skill folder — drop it into your vault's templates).
+> Assumes the LifeOS folder structure: a `300_Notes/learning/` capture folder and a `800_Templates/obsidian/learning-daily.md` template (a copy is bundled in this skill folder — drop it into your vault's templates).
 
 ## Paths
 ```
 DIR      = $VAULT/300_Notes/learning
-TEMPLATE = $VAULT/700_Templates/learning-daily.md
+TEMPLATE = $VAULT/800_Templates/obsidian/learning-daily.md
 ```
 
 ## Steps

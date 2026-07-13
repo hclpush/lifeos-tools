@@ -5,7 +5,7 @@ description: Sync Apple Notes tagged #for-obsidian into the Obsidian vault. Read
 
 # apple-notes-obsidian-sync
 
-Move notes Lezbyte flags in Apple Notes (with the `#for-obsidian` trigger tag) into the right
+Move notes the user flags in Apple Notes (with the `#for-obsidian` trigger tag) into the right
 place in the vault, once a day, without ever losing or duplicating anything.
 
 **Architecture — read this first.** A deterministic JXA script reads Notes.app and
@@ -98,7 +98,7 @@ Build your working set from the new + re-edited notes only.
 
 ## Step 4 — Route
 
-Read `tag-map.md` fresh every run (Lezbyte extends it by creating a smart folder and
+Read `tag-map.md` fresh every run (the user extends it by creating a smart folder and
 adding a row). For each note in the working set, in priority order:
 
 1. **Routing-folder membership** — if a name in the note's `smartFolders` list
@@ -107,11 +107,11 @@ adding a row). For each note in the working set, in priority order:
    excludes the note's real container, so every entry is a tag signal.)
    The `obsidian` row is special: it means **you decide** the best-fit `300_Notes/`
    subfolder from the note's content. If genuinely uncertain: interactively, ask
-   Lezbyte (AskUserQuestion); in the headless run, hold it in `needs-routing.md`
+   the user (AskUserQuestion); in the headless run, hold it in `needs-routing.md`
    instead of guessing.
 2. **Unknown membership** — the note is in smart folders but *none* match the table →
    **do not write to the vault**; append to `needs-routing.md` (Step 8) and move on.
-   The tag is real and deliberate — where it routes is Lezbyte's call, not a guess.
+   The tag is real and deliberate — where it routes is the user's call, not a guess.
    (Extra unknown memberships alongside a known one don't block routing — mention
    them in the run report.)
 3. **Literal-text hashtag fallback** — no memberships at all: scan `bodyText` for
@@ -201,8 +201,8 @@ after the hook runs.
 signal; the note stays in Apple Notes with its attachments intact.
 
 **LinkedIn (`400_Content/linkedin/drafts/`):** copy the body **verbatim — no
-rewriting.** A verbatim copy of Lezbyte's own note is source material, so it's allowed
-past the "LinkedIn goes through linkedin-post" rule, but the run report must remind her
+rewriting.** A verbatim copy of the user's own note is source material, so it's allowed
+past the "LinkedIn goes through linkedin-post" rule, but the run report must remind the user
 to run `linkedin-post` before publishing.
 
 Write the file with the `Write` tool (so the draft-frontmatter hook fires for drafts).

@@ -5,7 +5,8 @@
 
 set -u
 
-VAULT="/Users/user/Library/Mobile Documents/iCloud~md~obsidian/Documents/vault"
+# Set LIFEOS_VAULT in the environment, or edit the fallback path below.
+VAULT="${LIFEOS_VAULT:-/path/to/your/obsidian/vault}"
 CLAUDE_APP_ROOT="/Users/user/Library/Application Support/Claude/claude-code"
 TIMEOUT=420  # 7 minutes — check script takes seconds; budget is for triage + report
 

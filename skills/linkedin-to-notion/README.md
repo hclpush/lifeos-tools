@@ -14,8 +14,8 @@ Sheets).
 
 ## Config
 `config.json` holds recurring inputs:
-- `linkedin_profile_url` — default `https://www.linkedin.com/in/hsinchihlee/`
-- `notion_database_id` — `216d4ad9-0348-807d-b65f-d85cac93911f` (LinkedIn Posts Tracker)
+- `linkedin_profile_url` — your public profile URL, e.g. `https://www.linkedin.com/in/YOURSLUG/`
+- `notion_database_id` — the ID of your "LinkedIn Posts Tracker" database (see SKILL.md for first-run creation)
 - `notion_database_name` — `LinkedIn Posts Tracker`
 
 ## Notes

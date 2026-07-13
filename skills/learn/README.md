@@ -16,7 +16,7 @@ Capture step of the **Daily Learning Loop**: opens or creates today's daily lear
 2. Edit `~/.claude/skills/learn/SKILL.md` → set `VAULT` to your Obsidian vault path.
 3. Copy the bundled template into your vault:
    ```bash
-   cp skills/learn/learning-daily.md /path/to/your/obsidian/vault/700_Templates/
+   cp skills/learn/learning-daily.md /path/to/your/obsidian/vault/800_Templates/obsidian/
    ```
 
 ## Conventions it assumes

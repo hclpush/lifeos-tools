@@ -5,9 +5,25 @@
 
 set -u
 
+# ── Early-exit alarm ──────────────────────────────────────────────────────────
+# The status line + notification at the bottom only run if the script gets that
+# far. If it dies earlier (binary not found, cd fails, …) this trap logs and
+# notifies instead, so an early failure is never silent. CLAUDE_EXIT is set only
+# once claude has actually run, so "unset" means we never reached the normal ending.
+early_exit_alarm() {
+    local rc=$?
+    if [ "$rc" -ne 0 ] && [ -z "${CLAUDE_EXIT+x}" ]; then
+        mkdir -p "$HOME/.claude/logs"
+        printf '{"job":"security-audit","end":"%s","exit":%d,"secs":%d}\n' \
+            "$(date +%Y-%m-%dT%H:%M:%S)" "$rc" "$SECONDS" >> "$HOME/.claude/logs/runner-status.jsonl"
+        /usr/bin/osascript -e "display notification \"Security audit failed before starting (exit $rc) — check the error log\" with title \"LifeOS Security\""
+    fi
+}
+trap early_exit_alarm EXIT
+
 # Set LIFEOS_VAULT in the environment, or edit the fallback path below.
 VAULT="${LIFEOS_VAULT:-/path/to/your/obsidian/vault}"
-CLAUDE_APP_ROOT="/Users/user/Library/Application Support/Claude/claude-code"
+CLAUDE_APP_ROOT="$HOME/Library/Application Support/Claude/claude-code"
 TIMEOUT=420  # 7 minutes — check script takes seconds; budget is for triage + report
 
 # Default model (not Haiku): judging whether a new allow rule is outbound/destructive
@@ -17,18 +33,32 @@ TIMEOUT=420  # 7 minutes — check script takes seconds; budget is for triage + 
 echo "AUTH: using OAuth session (no explicit API key)"
 
 # ── Binary discovery ──────────────────────────────────────────────────────────
-LATEST_VERSION=$(ls "$CLAUDE_APP_ROOT" 2>/dev/null | sort -V | tail -1)
-if [ -z "$LATEST_VERSION" ]; then
-    echo "ERROR: no claude-code install found under $CLAUDE_APP_ROOT" >&2
-    exit 1
-fi
-REAL_CLAUDE="$CLAUDE_APP_ROOT/$LATEST_VERSION/claude.app/Contents/MacOS/claude"
-if [ ! -x "$REAL_CLAUDE" ]; then
-    echo "ERROR: $REAL_CLAUDE is not executable" >&2
-    exit 1
-fi
+# The desktop app has used two install layouts; hardcoding one broke every job
+# for 12 days when it switched (Oct 2026):
+#   old: claude-code/<version>/claude.app/Contents/MacOS/claude
+#   new: claude-code/<version>/<build-hash>/claude.app/Contents/MacOS/claude
+# Walk versions newest-first, accept either layout, fall back to an older version
+# if the newest is half-installed. On failure, dump the folder so the log shows
+# whatever new layout appeared.
+resolve_claude() {
+    local version vdir newest
+    for version in $(ls "$CLAUDE_APP_ROOT" 2>/dev/null | sort -V -r); do
+        vdir="$CLAUDE_APP_ROOT/$version"
+        if [ -x "$vdir/claude.app/Contents/MacOS/claude" ]; then
+            echo "$vdir/claude.app/Contents/MacOS/claude"; return 0
+        fi
+        newest=$(ls -td "$vdir"/*/claude.app/Contents/MacOS/claude 2>/dev/null | head -1)
+        if [ -n "$newest" ] && [ -x "$newest" ]; then
+            echo "$newest"; return 0
+        fi
+    done
+    echo "ERROR: no executable claude under $CLAUDE_APP_ROOT. Contents:" >&2
+    find "$CLAUDE_APP_ROOT" -maxdepth 4 2>&1 | sed 's/^/  /' >&2
+    return 1
+}
+REAL_CLAUDE="$(resolve_claude)" || exit 1
 export CMUX_CUSTOM_CLAUDE_PATH="$REAL_CLAUDE"
-export PATH="$CLAUDE_APP_ROOT/$LATEST_VERSION/claude.app/Contents/MacOS:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin"
+export PATH="$(dirname "$REAL_CLAUDE"):/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin"
 
 cd "$VAULT" || { echo "ERROR: cannot cd into $VAULT" >&2; exit 1; }
 

@@ -18,7 +18,7 @@ The model's role is only to triage the findings JSON and write a weekly report. 
 
 ## Scheduling
 
-Included as reference: `security-audit-runner.sh` (headless Claude invocation with watchdog, caffeinate, and desktop notification — never silent) and a launchd plist for Monday 9 AM weekly. Adapt paths before use; `check.py` assumes an Obsidian-vault layout for its report/baseline directory (`--vault` flag to override).
+Included as reference: `security-audit-runner.sh` (headless Claude invocation with watchdog, caffeinate, and desktop notification — never silent) and a launchd plist for Monday 9 AM weekly. The runner finds the desktop-bundled `claude` under either install layout (`claude-code/<version>/claude.app` or the newer `claude-code/<version>/<build-hash>/claude.app`) and fires a notification even if it dies before Claude starts. Adapt paths before use; `check.py` assumes an Obsidian-vault layout for its report/baseline directory (`--vault` flag to override).
 
 ## Install
 

@@ -44,6 +44,15 @@ node ~/.claude/skills/scripted-scrape/scripts/scrape-linkedin.js \
   --news --kols "profile-slug1,slug2" --max-per-kol 2 --out /tmp/li-scrape.json
 ```
 
+**LinkedIn — your own posts with full engagement metrics** (for the `linkedin-to-notion` skill):
+```bash
+node ~/.claude/skills/scripted-scrape/scripts/scrape-linkedin-own.js \
+  --slug YOUR_HANDLE --passes 14 --out /tmp/li-own.json
+```
+Scrapes the owner's own `recent-activity/all/` feed and captures each post's text, relative
+timestamp, reactions, comments, reposts, **owner-only impressions**, and media type, keyed by
+`urn:li:activity:` ID. Auto-stops after 3 stagnant scroll passes; `--passes` caps the max.
+
 ## Output contract
 
 Every scraper writes JSON with the same envelope:

@@ -57,7 +57,7 @@ Skills assume the [vault-template](vault-template/) layout — a numbered two-le
 
 | Skill | What it does |
 |---|---|
-| [apple-notes-obsidian-sync](skills/apple-notes-obsidian-sync/) | Syncs Apple Notes tagged `#for-obsidian` into the vault, routed by their real tags via Smart Folders (the only automation-visible surface for Notes tag chips) |
+| [apple-notes-obsidian-sync](skills/apple-notes-obsidian-sync/) | Syncs Apple Notes tagged `#on-obsidian` into the vault, routed by their real tags via Smart Folders (the only automation-visible surface for Notes tag chips) |
 
 ### Social media
 
@@ -65,9 +65,9 @@ Skills assume the [vault-template](vault-template/) layout — a numbered two-le
 |---|---|
 | [linkedin-post](skills/linkedin-post/) | LinkedIn drafting with anti-AI-voice hard rules (≤ 9-word hook, ≤ 1,300 chars) and mandatory voice calibration from your past posts |
 | [linkedin-post-algorithm](skills/linkedin-post-algorithm/) | The distribution layer: engagement weights, format multipliers, posting slots, Golden Hour routine, post-mortems |
-| [linkedin-to-notion](skills/linkedin-to-notion/) | Scrapes your LinkedIn posts → Notion "LinkedIn Posts Tracker" with engagement metrics (impressions, reactions, comments, shares) |
+| [linkedin-to-notion](skills/linkedin-to-notion/) | Scrapes your LinkedIn posts → Notion "LinkedIn Posts Tracker" with engagement metrics (impressions, reactions, comments, shares); auto-login via the scripted-scrape profile, optional Category/Topic/Tags inference |
 | [threads-genre-study](skills/threads-genre-study/) | Scrapes Threads for top high-share posts in your configured genre, ranks by weighted engagement, and writes a per-post style/technique breakdown |
-| [scripted-scrape](skills/scripted-scrape/) | Deterministic Playwright scrapers for logged-in sites (X, LinkedIn) — scripts browse, the model only analyzes JSON; prompt-injection-safe unattended scraping |
+| [scripted-scrape](skills/scripted-scrape/) | Deterministic Playwright scrapers for logged-in sites (X, LinkedIn feeds + your own posts with full metrics) — scripts browse, the model only analyzes JSON; prompt-injection-safe unattended scraping |
 | [fathom-pod-recap](skills/fathom-pod-recap/) | Turns a Fathom meeting-recap email into a clean, tracking-link-free community post |
 
 Looking for the CCA-F exam-prep skills (mock-exam analysis, tech foundations, practice audits)? They live in their own plugin marketplace: [hclpush/cca-f](https://github.com/hclpush/cca-f).
@@ -79,6 +79,7 @@ Standalone OS-level automations (not Claude Code skills) — each installs from 
 | Automation | What it does |
 |---|---|
 | [append-to-obsidian](automations/append-to-obsidian/) | macOS Quick Action: right-click selected text in any app → append it to an Obsidian note via `notesmd-cli` |
+| [clip-to-obsidian](automations/clip-to-obsidian/) | macOS Quick Action: right-click selected text → clipped into its own vault note named after the email subject or page title, with source properties (author/sent for Apple Mail, URL for web) and auto tags |
 | [agent-routing-guard](automations/agent-routing-guard/) | Claude Code PreToolUse hook: blocks the agent from misplacing files in the vault's `000_Agent/` workspace (root closed, new folders need permission, memory mirror read-only) |
 
 ## Per-skill requirements

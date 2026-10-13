@@ -9,8 +9,8 @@ tracker but tailored for LinkedIn's native metrics. Notion is the only destinati
 Sheets).
 
 ## Requires
-- **Playwright MCP** — browser automation for scraping (interactive login, never asks for the password in chat)
-- **Notion MCP** — writes rows to the existing tracker
+- **scripted-scrape login profile** (preferred) — the committed `scrape-linkedin-own.js` reuses a persistent logged-in profile, so most runs auto-login. **Playwright MCP** is the fallback (interactive login, never asks for the password in chat).
+- **claude.ai Notion MCP** (`mcp__claude_ai_Notion__*`) — `notion-fetch` + `notion-query-data-sources` (SQL) for reads, `notion-create-pages` / `notion-update-page` for writes. The stdio `mcp__notion__*` MCP's query endpoint may be broken on some workspaces (`400 invalid_request_url`); prefer the claude.ai MCP.
 
 ## Config
 `config.json` holds recurring inputs:
@@ -26,3 +26,9 @@ Sheets).
   engagement, "skip" to append only new posts.
 - LinkedIn DOM drifts often; the collection script uses loose text-pattern fallbacks and the
   SKILL.md tells the model to snapshot and adjust selectors if counts come back null.
+- Can infer **Category/Theme · Topic · Tags** on request — the SKILL.md carries a Topic
+  schema with a definition per option for consistent tagging.
+- Gotchas documented in SKILL.md's "Field notes": truncate Content by **UTF-16 weight**
+  (bold/italic glyphs count double), never write multi-row bursts from a `status=`-using zsh
+  loop (read-only var → mid-loop abort → duplicate row), and verify the follower count (it can
+  bleed from a reshared author on the feed) or leave it blank.

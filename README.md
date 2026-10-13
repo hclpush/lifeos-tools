@@ -57,7 +57,7 @@ Skills assume the [vault-template](vault-template/) layout — a numbered two-le
 
 | Skill | What it does |
 |---|---|
-| [apple-notes-obsidian-sync](skills/apple-notes-obsidian-sync/) | Syncs Apple Notes tagged `#on-obsidian` into the vault, routed by their real tags via Smart Folders (the only automation-visible surface for Notes tag chips) |
+| [apple-notes-obsidian-sync](skills/apple-notes-obsidian-sync/) | Syncs Apple Notes tagged `#on-obsidian` into the vault, routed by their real tags via Smart Folders (the only automation-visible surface for Notes tag chips); includes a launchd runner + plist for a daily headless run |
 
 ### Social media
 

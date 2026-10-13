@@ -9,7 +9,7 @@
 // only automation-visible surface for chips is a **Smart Folder**: Notes evaluates
 // the tag filter itself and exposes the matching notes as a normal folder.
 //
-// So: the trigger is the smart folder named "obsidian" (filter: tag #obsidian),
+// So: the trigger is the smart folder named "on-obsidian" (filter: tag #on-obsidian),
 // and routing is decided by which OTHER folders each trigger note appears in
 // (each routing smart folder filters on one or more tags — "any of" supported).
 // The skill maps folder names -> vault destinations via tag-map.md; this script
@@ -26,10 +26,10 @@
 // granted interactively 2026-07-09.
 
 function run() {
-    // Smart folder that marks a note for sync. Trigger tag is #for-obsidian —
-    // pure plumbing; every other tag on a note (including #obsidian) is a real
+    // Smart folder that marks a note for sync. Trigger tag is #on-obsidian —
+    // pure plumbing; every other tag on a note is a real
     // routing tag with its own smart folder.
-    const TRIGGER_FOLDERS = ['for-obsidian'];
+    const TRIGGER_FOLDERS = ['on-obsidian'];
 
     const Notes = Application('Notes');
     const out = [];

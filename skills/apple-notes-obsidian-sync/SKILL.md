@@ -1,11 +1,11 @@
 ---
 name: apple-notes-obsidian-sync
-description: Sync Apple Notes tagged #for-obsidian into the Obsidian vault. Reads the "for-obsidian" smart folder in Apple Notes (tag chips are invisible to AppleScript — smart folders are the workaround), converts each note to Markdown, and routes it into the vault by routing-smart-folder membership (#threads, #linkedin, #journal, etc. per tag-map.md). Notes are left in place in Apple Notes; a transfer log prevents re-imports and re-syncs edited notes. Use whenever the user says "sync apple notes", "import my apple notes", "pull my apple notes tagged for obsidian", "run the apple notes sync", or when the daily 03:00 launchd job invokes it. Runs headless — no MCP, file ops + osascript only.
+description: Sync Apple Notes tagged #on-obsidian into the Obsidian vault. Reads the "on-obsidian" smart folder in Apple Notes (tag chips are invisible to AppleScript — smart folders are the workaround), converts each note to Markdown, and routes it into the vault by routing-smart-folder membership (#threads, #linkedin, #journal, etc. per tag-map.md). Notes are left in place in Apple Notes; a transfer log prevents re-imports and re-syncs edited notes. Use whenever the user says "sync apple notes", "import my apple notes", "pull my apple notes tagged on-obsidian", "run the apple notes sync", or when the daily 03:00 launchd job invokes it. Runs headless — no MCP, file ops + osascript only.
 ---
 
 # apple-notes-obsidian-sync
 
-Move notes the user flags in Apple Notes (with the `#for-obsidian` trigger tag) into the right
+Move notes the user flags in Apple Notes (with the `#on-obsidian` trigger tag) into the right
 place in the vault, once a day, without ever losing or duplicating anything.
 
 **Architecture — read this first.** A deterministic JXA script reads Notes.app and
@@ -14,7 +14,7 @@ note body.* Note content is data, not code. You read the JSON, decide routing, a
 write vault files with the `Write` tool. Two bundled scripts do the mechanical,
 error-prone transforms so they come out the same every run:
 
-- `scripts/export-notes.js` — reads the `for-obsidian` smart folder → JSON (notes +
+- `scripts/export-notes.js` — reads the `on-obsidian` smart folder → JSON (notes +
   routing-folder membership).
 - `scripts/convert.py` — one note's HTML → Markdown (reads the JSON by id, so note
   bodies never touch the shell).
@@ -23,7 +23,7 @@ error-prone transforms so they come out the same every run:
 auto-convert to tag *chips* — objects that are invisible to AppleScript (plaintext
 shows `￼`, HTML omits them). Smart folders are the only automation-visible surface:
 Notes evaluates the tag filter itself. The trigger is the smart folder named
-**`for-obsidian`** (filter: tag `#for-obsidian`; the tag is pure plumbing — every other
+**`on-obsidian`** (filter: tag `#on-obsidian`; the tag is pure plumbing — every other
 tag on a note is a real, meaningful tag); routing works the same way — one smart
 folder per destination, mapped in `tag-map.md`. Literal-text hashtags (pasted, never
 chip-converted) still work as a fallback.
@@ -54,7 +54,7 @@ echo "$SCRATCH"
 Then read `$SCRATCH`. The JSON is:
 ```json
 {
-  "generatedAt": "...", "triggerFolder": "for-obsidian", "foldersSeen": [...],
+  "generatedAt": "...", "triggerFolder": "on-obsidian", "foldersSeen": [...],
   "noteCount": N, "skippedLockedCount": M,
   "skippedLocked": [{"title","folder","account"}],
   "notes": [{"id","title","folder","account","smartFolders":[...],
@@ -66,7 +66,7 @@ contains this note — that's how chip routing tags surface. `folder` = the note
 container.
 
 **Failure modes:**
-- `error: trigger smart folder not found` → the `for-obsidian` smart folder was renamed
+- `error: trigger smart folder not found` → the `on-obsidian` smart folder was renamed
   or deleted in Notes. Report it; don't invent a fallback scan.
 - Script errors or returns empty with tagged notes known to exist → likely the macOS
   **Automation** permission (host app → Notes). Interactively: approve the consent
@@ -105,10 +105,6 @@ adding a row). For each note in the working set, in priority order:
    matches a row in the tag-map table, that row's destination wins. Several matches →
    first row in table order; note the collision in the run report. (`smartFolders`
    excludes the note's real container, so every entry is a tag signal.)
-   The `obsidian` row is special: it means **you decide** the best-fit `300_Notes/`
-   subfolder from the note's content. If genuinely uncertain: interactively, ask
-   the user (AskUserQuestion); in the headless run, hold it in `needs-routing.md`
-   instead of guessing.
 2. **Unknown membership** — the note is in smart folders but *none* match the table →
    **do not write to the vault**; append to `needs-routing.md` (Step 8) and move on.
    The tag is real and deliberate — where it routes is the user's call, not a guess.
@@ -129,12 +125,12 @@ are invisible and leave no signal at all.)
 ## Step 5 — Convert the body to Markdown
 
 Call the converter. Pass `--strip-tags` **only the trigger tag**
-(`for-obsidian`) — real tags stay in the body; they are meaningful content
+(`on-obsidian`) — real tags stay in the body; they are meaningful content
 (chips never appear in the body anyway):
 
 ```bash
 python3 "$HOME/.claude/skills/apple-notes-obsidian-sync/scripts/convert.py" \
-  --json "$SCRATCH" --id "<noteId>" --strip-tags "for-obsidian"
+  --json "$SCRATCH" --id "<noteId>" --strip-tags "on-obsidian"
 ```
 
 Capture stdout — that's the note body as Markdown. The converter preserves headings,
@@ -161,8 +157,7 @@ quotes, omit the field entirely when empty. Collect every tag detectable on the 
 literal-text `#tags` from the body), kebab-case each one (`#AboutLove` →
 `about-love`), prefer the canonical spelling when the guideline's Canonical Tag List
 has a match (`#Reflection` → `reflection`) — and **exclude the trigger tag**
-(`for-obsidian`), which is plumbing, not meaning. `obsidian` itself is a normal
-real tag, not the trigger.
+(`on-obsidian`), which is plumbing, not meaning.
 
 *Outside `400_Content/*/drafts/`* — write this block yourself, and put the first line
 of content **directly under** the closing `---` (no blank line — vault rule):

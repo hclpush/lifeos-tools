@@ -27,6 +27,6 @@ Registry of installed Claude Code skills. Keep one row per skill; `daily-sync` a
 | `threads-genre-study` | Scrape Threads, rank top high-share posts in your genre, per-post style breakdown |
 | `email-crash-course` | Build an Obsidian crash-course note from a Gmail email series |
 | `fathom-pod-recap` | Turn a Fathom meeting-recap email into a link-free community post |
-| `apple-notes-obsidian-sync` | Daily sync of `#for-obsidian`-tagged Apple Notes into the vault |
+| `apple-notes-obsidian-sync` | Daily sync of `#on-obsidian`-tagged Apple Notes into the vault |
 | `ml-concept-viz` | Turn any ML/DS/stats concept into an interactive explainer |
 | `agentic-os-build-box` | Park an unfinished task as a build-box chip + handover doc |
